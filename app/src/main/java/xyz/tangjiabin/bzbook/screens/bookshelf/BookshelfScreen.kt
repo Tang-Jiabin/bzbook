@@ -1,20 +1,44 @@
 package xyz.tangjiabin.bzbook.screens.bookshelf
 
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImagePainter.State.Empty.painter
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
+import xyz.tangjiabin.bzbook.R
+import xyz.tangjiabin.bzbook.data.Book
 import xyz.tangjiabin.bzbook.data.SearchWidgetState
 import xyz.tangjiabin.bzbook.data.TopBarViewModel
+import xyz.tangjiabin.bzbook.graph.OtherScreen
 import xyz.tangjiabin.bzbook.screens.top.TopBarScreen
 
 /**
@@ -26,49 +50,79 @@ import xyz.tangjiabin.bzbook.screens.top.TopBarScreen
  * @date 2022-06-23
  */
 
+@Composable
+fun BookshelfScreen(navController: NavHostController) {
+
+//    val bookList: List<Book> = getBookshelfContent()
+//    BookshelfList(bookList = bookList, navController = navController)
+
+}
 
 @Composable
-fun BookshelfScreen(name: String, onClick: () -> Unit) {
+private fun getBookshelfContent(): List<Book> {
+    val cover: String = "https://tva4.sinaimg.cn/large/0072Vf1pgy1foxkieg2ntj31kw0w07su.jpg"
+    return listOf(
+        Book("shuji1", "作者1", cover, "简介", "完本", "120万字", "第一千三百五十四章 空间顶顶顶"),
+        Book("shuji2", "作者2", cover, "简介", "连载中", "120万字", "第二千三百五十四章 空间顶顶顶"),
+        Book("shuji3", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
+        Book("shuji4", "作者4", cover, "简介", "连载中", "120万字", "第四千三百五十四章 空间顶顶顶")
+    )
+}
 
-    val topBarViewModel: TopBarViewModel = viewModel()
-    val searchWidgetState by topBarViewModel.searchWidgetState
-    val searchTextState by topBarViewModel.searchTextState
-
-    Scaffold(
-        topBar = {
-            TopBarScreen(
-                title = "书架",
-                searchWidgetState = searchWidgetState,
-                searchTextState = searchTextState,
-                onTextChange = {
-                    topBarViewModel.updateSearchTextState(newValue = it)
-                },
-                onCloseClicked = {
-                    topBarViewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                },
-                onSearchClicked = {
-                    topBarViewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                    Log.d("Searched Text", it)
-                },
-                onSearchTriggered = {
-                    topBarViewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
-                }
-            )
-        }
-    ) {
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+@Composable
+fun BookshelfList(bookList: List<Book>, navController: NavHostController) {
+    Column(modifier = Modifier.padding(10.dp)) {
+        Text(
+            text = "您的书架藏书共 ${bookList.size} 本",
+            fontSize = 14.sp,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(100.dp),
         ) {
-            Text(
-                modifier = Modifier.clickable { onClick() },
-                text = name,
-                fontSize = MaterialTheme.typography.h3.fontSize,
-                fontWeight = FontWeight.Bold
-            )
+            items(bookList) {
+                BookshelfContent(it, navController)
+            }
         }
     }
+
+
+}
+
+@Composable
+fun BookshelfContent(book: Book, navController: NavHostController) {
+
+    Box(contentAlignment = Alignment.TopCenter,
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color.Red)
+            .clickable { navController.navigate(OtherScreen.Read.route) },
+        content = {
+            Column() {
+
+//                val painter = rememberAsyncImagePainter(
+//                    ImageRequest.Builder(LocalContext.current)
+//                        .data(book.cover)
+//                        .placeholder(R.drawable.ic_baseline_menu_24)
+//                        .error(R.drawable.ic_baseline_menu_24)
+//                        .crossfade(true)
+//                        .transformations(RoundedCornersTransformation(4f))
+//                        .build()
+//                )
+
+//                Image(
+//                    painter,
+//                    contentDescription = book.name,
+//                    contentScale = ContentScale.FillBounds,
+//                    modifier = Modifier
+//                        .width(100.dp)
+//                        .height(120.dp)
+//                )
+                Text(text = book.name, fontSize = 16.sp, overflow = TextOverflow.Ellipsis, maxLines = 1)
+                Text(text = book.chapter, fontSize = 10.sp, overflow = TextOverflow.Ellipsis, maxLines = 1)
+            }
+        })
 
 
 }

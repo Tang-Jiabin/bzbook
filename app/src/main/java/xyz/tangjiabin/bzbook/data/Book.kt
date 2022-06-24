@@ -16,4 +16,5 @@ class Book(
     var state: String,
     var words: String,
     var chapter: String
-) {}
+) {
+}

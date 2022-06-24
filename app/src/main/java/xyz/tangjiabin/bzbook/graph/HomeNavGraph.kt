@@ -31,12 +31,7 @@ fun HomeNavGraph(navController: NavHostController) {
 
         //书架
         composable(route = BottomBarScreen.Bookshelf.route) {
-            BookshelfScreen(
-                name = BottomBarScreen.Bookshelf.route,
-                onClick = {
-                    navController.navigate(OtherScreen.Read.route)
-                }
-            )
+            BookshelfScreen(navController)
         }
         //分类
         composable(route = BottomBarScreen.Classification.route) {
@@ -49,7 +44,7 @@ fun HomeNavGraph(navController: NavHostController) {
         composable(route = BottomBarScreen.Me.route) {
             MeScreen(
                 name = BottomBarScreen.Me.route,
-                onClick = {navController.navigate(OtherScreen.Login.route) }
+                onClick = { navController.navigate(OtherScreen.Login.route) }
             )
         }
         //阅读
@@ -77,7 +72,7 @@ fun HomeNavGraph(navController: NavHostController) {
         composable(route = OtherScreen.Login.route) {
             DetailsScreen(
                 name = OtherScreen.Login.route,
-                onClick = {navController.navigate(BottomBarScreen.Me.route)}
+                onClick = { navController.navigate(BottomBarScreen.Me.route) }
             )
         }
     }

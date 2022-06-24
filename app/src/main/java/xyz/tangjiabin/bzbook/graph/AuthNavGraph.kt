@@ -37,10 +37,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
             )
         }
         composable(route = AuthScreen.SignUp.route) {
-            BookshelfScreen(name = AuthScreen.SignUp.route) { navController.navigate(AuthScreen.Forgot.route)}
+            BookshelfScreen(navController)
         }
         composable(route = AuthScreen.Forgot.route) {
-            BookshelfScreen(name = AuthScreen.Forgot.route) {navController.navigate(AuthScreen.SignUp.route)}
+            BookshelfScreen(navController)
         }
     }
 }

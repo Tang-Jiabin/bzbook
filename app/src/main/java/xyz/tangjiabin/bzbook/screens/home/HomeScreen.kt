@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import xyz.tangjiabin.bzbook.graph.HomeNavGraph
 import xyz.tangjiabin.bzbook.screens.bottom.BottomBar
+import xyz.tangjiabin.bzbook.screens.top.TopBarScreen
 
 
 /**
@@ -20,6 +21,7 @@ import xyz.tangjiabin.bzbook.screens.bottom.BottomBar
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
+//        topBar = { TopBarScreen(navController = navController) },
         bottomBar = { BottomBar(navController = navController) }
     ) {
         HomeNavGraph(navController = navController)
