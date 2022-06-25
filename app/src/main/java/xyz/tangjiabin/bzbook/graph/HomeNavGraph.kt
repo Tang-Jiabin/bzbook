@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import xyz.tangjiabin.bzbook.screens.bookshelf.BookshelfScreen
 import xyz.tangjiabin.bzbook.screens.bottom.BottomBarScreen
 import xyz.tangjiabin.bzbook.screens.classification.ClassificationScreen
 import xyz.tangjiabin.bzbook.screens.details.DetailsScreen
-import xyz.tangjiabin.bzbook.screens.bookshelf.BookshelfScreen
 import xyz.tangjiabin.bzbook.screens.me.MeScreen
 import xyz.tangjiabin.bzbook.screens.read.ReadScreen
 import xyz.tangjiabin.bzbook.screens.search.SearchScreen

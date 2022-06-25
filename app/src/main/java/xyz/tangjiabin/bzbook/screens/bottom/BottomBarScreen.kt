@@ -1,7 +1,6 @@
 package xyz.tangjiabin.bzbook.screens.bottom
 
 
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
