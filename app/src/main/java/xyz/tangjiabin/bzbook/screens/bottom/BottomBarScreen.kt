@@ -1,6 +1,7 @@
 package xyz.tangjiabin.bzbook.screens.bottom
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,8 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -58,24 +61,47 @@ fun RowScope.AddItem(
 ) {
     BottomNavigationItem(
         label = {
-            Text(text = screen.title)
+            var iconColor = MaterialTheme.colors.onBackground
+            if (currentDestination?.hierarchy?.any {
+                    it.route == screen.route
+                } == true) {
+                iconColor = Color.Green
+            }
+            Text(text = screen.title, color = iconColor)
         },
+//        icon = {
+//            Icon(
+//                imageVector = screen.icon,
+//                contentDescription = "Navigation Icon"
+//            )
+//        },
         icon = {
+            var iconRes = screen.icon
+            var iconColor = MaterialTheme.colors.onBackground
+            if (currentDestination?.hierarchy?.any {
+                    it.route == screen.route
+                } == true) {
+                iconRes = screen.icon
+                iconColor = Color.Green
+            }
             Icon(
-                imageVector = screen.icon,
-                contentDescription = "Navigation Icon"
+                imageVector = iconRes,
+                contentDescription = screen.title,
+                tint = iconColor,
             )
         },
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+        unselectedContentColor = MaterialTheme.colors.onBackground,
+        selectedContentColor = Color.Blue,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        }
+        },modifier = Modifier.background(MaterialTheme.colors.background)
+
     )
 }
 
