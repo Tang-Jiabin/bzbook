@@ -1,4 +1,4 @@
-package xyz.tangjiabin.bzbook.data
+package xyz.tangjiabin.bzbook.screens.bookshelf
 
 /**
  * 书架编辑按钮状态枚举

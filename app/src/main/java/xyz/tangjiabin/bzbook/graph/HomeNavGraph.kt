@@ -35,10 +35,7 @@ fun HomeNavGraph(navController: NavHostController) {
         }
         //分类
         composable(route = BottomBarScreen.Classification.route) {
-            ClassificationScreen(
-                name = BottomBarScreen.Classification.route,
-                onClick = { navController.navigate(OtherScreen.Search.route) }
-            )
+            ClassificationScreen(navController)
         }
         //我的
         composable(route = BottomBarScreen.Me.route) {

@@ -1,6 +1,5 @@
 package xyz.tangjiabin.bzbook.screens.bookshelf
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,8 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
@@ -26,16 +25,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import xyz.tangjiabin.bzbook.R
-import xyz.tangjiabin.bzbook.data.Book
-import xyz.tangjiabin.bzbook.data.EditButtonStateEnum
-import xyz.tangjiabin.bzbook.data.EditStateViewModel
+import xyz.tangjiabin.bzbook.database.entity.Bookshelf
 import xyz.tangjiabin.bzbook.graph.OtherScreen
+import kotlin.concurrent.thread
 
 /**
  * 书架（首页）内容
@@ -49,58 +50,26 @@ import xyz.tangjiabin.bzbook.graph.OtherScreen
 @Composable
 fun BookshelfScreen(navController: NavHostController) {
     val editState: EditStateViewModel = viewModel()
-    val bookList: List<Book> = getBookshelfContent()
-    BookshelfList(bookList = bookList, editState = editState, navController = navController)
+    val bookshelfViewModel: BookshelfViewModel = hiltViewModel()
+    val bookPagingItems = bookshelfViewModel.bk.collectAsLazyPagingItems()
 
+//    Column() {
+//        Button(onClick = { bookshelfViewModel.save() }) {
+//            Text(text = "保存")
+//        }
+
+    BookshelfList(bookList = bookPagingItems, editState = editState, navController = navController)
+
+//    }
 }
 
-@Composable
-private fun getBookshelfContent(): List<Book> {
-    val cover = "https://tva4.sinaimg.cn/large/0072Vf1pgy1foxkieg2ntj31kw0w07su.jpg"
-    return listOf(
-        Book("书", "作者1", cover, "简介", "完本", "120万字", "第一千三百五十四章 空间顶顶顶"),
-        Book("书籍", "作者2", cover, "简介", "连载中", "120万字", "第二千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名", "作者3", cover, "简介", "完本", "120万字", "第三千三百五十四章 空间顶顶顶"),
-        Book("书籍名称", "作者4", cover, "简介", "连载中", "120万字", "第四千三百五十四章 空间顶顶顶")
-    )
-}
 
 @Composable
-fun BookshelfList(bookList: List<Book>, editState: EditStateViewModel, navController: NavHostController) {
+fun BookshelfList(
+    bookList: LazyPagingItems<Bookshelf>,
+    editState: EditStateViewModel,
+    navController: NavHostController
+) {
     Column(modifier = Modifier.padding(10.dp)) {
 
 
@@ -111,7 +80,7 @@ fun BookshelfList(bookList: List<Book>, editState: EditStateViewModel, navContro
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "您的藏书共 ${bookList.size} 本",
+                text = "您的藏书共 ${bookList.itemCount} 本",
                 fontSize = 14.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
@@ -156,18 +125,20 @@ fun BookshelfList(bookList: List<Book>, editState: EditStateViewModel, navContro
                     )
                 }
             }
-
-
         }
 
         //书架列表
         LazyVerticalGrid(
             columns = GridCells.Adaptive(100.dp),
+            modifier = Modifier.padding(bottom = 80.dp)
         ) {
-            items(bookList) {
-                BookshelfContent(it, editState, navController)
+            items(bookList.itemCount) { index ->
+                bookList[index]?.let {
+                    BookshelfContent(it, editState, navController)
+                }
             }
         }
+
 
     }
 
@@ -175,7 +146,7 @@ fun BookshelfList(bookList: List<Book>, editState: EditStateViewModel, navContro
 }
 
 @Composable
-fun BookshelfContent(book: Book, editState: EditStateViewModel, navController: NavHostController) {
+fun BookshelfContent(book: Bookshelf, editState: EditStateViewModel, navController: NavHostController) {
     val checkboxState = remember {
         mutableStateOf(false)
     }
@@ -185,7 +156,6 @@ fun BookshelfContent(book: Book, editState: EditStateViewModel, navController: N
             .width(100.dp)
             .padding(10.dp)
             .clickable {
-                Log.d("Tang", book.name)
 
                 if (editState.editButtonState.value == EditButtonStateEnum.OPENED) {
                     checkboxState.value = !checkboxState.value
@@ -207,7 +177,9 @@ fun BookshelfContent(book: Book, editState: EditStateViewModel, navController: N
                         .build()
                 )
                 //封面图片
-                var modifier: Modifier = Modifier.fillMaxWidth().height(120.dp)
+                var modifier: Modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
                 if (checkboxState.value) {
                     modifier = Modifier
                         .fillMaxWidth()
@@ -228,6 +200,7 @@ fun BookshelfContent(book: Book, editState: EditStateViewModel, navController: N
                     maxLines = 1,
                     modifier = Modifier.padding(top = 10.dp)
                 )
+
                 //章节
                 Text(
                     text = book.chapter,
@@ -236,6 +209,7 @@ fun BookshelfContent(book: Book, editState: EditStateViewModel, navController: N
                     maxLines = 1,
                     color = Color.Gray
                 )
+
             }
 
             if (editState.editButtonState.value == EditButtonStateEnum.OPENED) {

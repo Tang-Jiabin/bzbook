@@ -1,4 +1,4 @@
-package xyz.tangjiabin.bzbook.data
+package xyz.tangjiabin.bzbook.screens.bookshelf
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
