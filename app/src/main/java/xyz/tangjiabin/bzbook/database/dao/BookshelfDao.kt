@@ -1,12 +1,9 @@
 package xyz.tangjiabin.bzbook.database.dao
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-import xyz.tangjiabin.bzbook.database.entity.Bookshelf
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+import xyz.tangjiabin.bzbook.database.entity.BookshelfEntity
 
 /**
  * 书架
@@ -19,15 +16,21 @@ import xyz.tangjiabin.bzbook.database.entity.Bookshelf
 @Dao
 interface BookshelfDao {
 
-    @Query("SELECT * FROM Bookshelf")
-    fun findAll(): PagingSource<Int, Bookshelf>
+    @Query("SELECT * FROM bz_bookshelf")
+    fun findPage(): PagingSource<Int, BookshelfEntity>
+
+    @Query("SELECT * FROM bz_bookshelf")
+    fun findAll(): Flow<List<BookshelfEntity>>
 
     @Insert
-    fun save(bookshelf: Bookshelf)
+    fun save(bookshelf: BookshelfEntity)
 
     @Update
-    fun update(bookshelf: Bookshelf)
+    fun update(bookshelf: BookshelfEntity)
 
     @Delete
-    fun delete(bookshelf: Bookshelf)
+    fun delete(bookshelf: BookshelfEntity)
+
+    @Delete
+    fun deleteAll(bookshelfList: List<BookshelfEntity>)
 }

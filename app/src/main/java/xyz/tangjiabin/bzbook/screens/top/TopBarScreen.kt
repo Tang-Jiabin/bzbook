@@ -45,7 +45,7 @@ fun TopBarScreen(
     }
 
     val onSearchClicked = { navController.navigate(OtherScreen.Search.route) }
-    val onMenuClicked = {}
+    val onMenuClicked = { }
 
     val bottomBarDestination = screen != null
 

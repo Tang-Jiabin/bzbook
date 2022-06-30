@@ -12,9 +12,8 @@ import androidx.room.PrimaryKey
  * @email seven_tjb@163.com
  * @date 2022-06-29
  */
-@Entity
+@Entity(tableName = "bz_category")
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val name: String,
-    @ColumnInfo val selected: Boolean
 )

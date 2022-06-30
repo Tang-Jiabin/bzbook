@@ -12,8 +12,8 @@ import androidx.room.PrimaryKey
  * @email seven_tjb@163.com
  * @date 2022-06-28
  */
-@Entity
-data class Bookshelf(
+@Entity(tableName = "bz_bookshelf")
+data class BookshelfEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val name: String,
     @ColumnInfo val cover: String,

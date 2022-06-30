@@ -12,3 +12,5 @@ package xyz.tangjiabin.bzbook.utils
 const val DATABASE_NAME = "bzbook-db"
 
 const val ITEMS_PER_PAGE = 10
+
+const val LOG_TAG_INFO = "LOG_TAG_INFO"

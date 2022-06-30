@@ -7,14 +7,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,17 +26,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import xyz.tangjiabin.bzbook.R
-import xyz.tangjiabin.bzbook.database.entity.Bookshelf
+import xyz.tangjiabin.bzbook.database.entity.BookshelfEntity
 import xyz.tangjiabin.bzbook.graph.OtherScreen
-import kotlin.concurrent.thread
+import kotlin.random.Random
 
 /**
  * 书架（首页）内容
@@ -48,31 +45,28 @@ import kotlin.concurrent.thread
  */
 
 @Composable
-fun BookshelfScreen(navController: NavHostController) {
-    val editState: EditStateViewModel = viewModel()
-    val bookshelfViewModel: BookshelfViewModel = hiltViewModel()
-    val bookPagingItems = bookshelfViewModel.bk.collectAsLazyPagingItems()
+fun BookshelfScreen(navController: NavHostController, viewModel: BookshelfViewModel = hiltViewModel()) {
 
-//    Column() {
-//        Button(onClick = { bookshelfViewModel.save() }) {
-//            Text(text = "保存")
-//        }
 
-    BookshelfList(bookList = bookPagingItems, editState = editState, navController = navController)
+    LaunchedEffect(Unit) {
+        viewModel.getAllBookshelf()
+    }
 
-//    }
+    BookshelfList(viewModel = viewModel, navController = navController)
+
+
 }
 
 
 @Composable
 fun BookshelfList(
-    bookList: LazyPagingItems<Bookshelf>,
-    editState: EditStateViewModel,
+    viewModel: BookshelfViewModel,
     navController: NavHostController
 ) {
+
+    val bookList = viewModel.bookshelfList
+
     Column(modifier = Modifier.padding(10.dp)) {
-
-
         //统计及编辑按钮
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -80,14 +74,14 @@ fun BookshelfList(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "您的藏书共 ${bookList.itemCount} 本",
+                text = "您的藏书共 ${bookList.size} 本",
                 fontSize = 14.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 modifier = Modifier.padding(10.dp)
             )
 
-            if (editState.editButtonState.value == EditButtonStateEnum.CLOSED) {
+            if (viewModel.editButtonState.value == EditButtonStateEnum.CLOSED) {
                 Text(
                     text = "编辑",
                     fontSize = 14.sp,
@@ -96,7 +90,7 @@ fun BookshelfList(
                     maxLines = 1,
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { editState.updateEditButtonState(EditButtonStateEnum.OPENED) }
+                        .clickable { viewModel.updateEditButtonState(EditButtonStateEnum.OPENED) }
                 )
             } else {
                 Row(
@@ -111,7 +105,7 @@ fun BookshelfList(
                         maxLines = 1,
                         modifier = Modifier
                             .padding(10.dp)
-                            .clickable { editState.updateEditButtonState(EditButtonStateEnum.CLOSED) }
+                            .clickable { viewModel.deleteBookshelf() }
                     )
                     Text(
                         text = "完成",
@@ -121,7 +115,7 @@ fun BookshelfList(
                         maxLines = 1,
                         modifier = Modifier
                             .padding(10.dp)
-                            .clickable { editState.updateEditButtonState(EditButtonStateEnum.CLOSED) }
+                            .clickable { viewModel.updateEditButtonState(EditButtonStateEnum.CLOSED) }
                     )
                 }
             }
@@ -130,11 +124,23 @@ fun BookshelfList(
         //书架列表
         LazyVerticalGrid(
             columns = GridCells.Adaptive(100.dp),
-            modifier = Modifier.padding(bottom = 80.dp)
+            modifier = Modifier.border(1.dp, Color.Black).padding(bottom = 80.dp)
         ) {
-            items(bookList.itemCount) { index ->
-                bookList[index]?.let {
-                    BookshelfContent(it, editState, navController)
+            items(bookList) {
+                BookshelfContent(it, viewModel, navController)
+            }
+            item {
+                Button(onClick = {
+                    viewModel.addBookshelf(
+                        BookshelfEntity(
+                            0,
+                            "书籍名称" + Random.nextInt(100),
+                            "https://picsum.photos/200/300?" + Random.nextInt(100),
+                            "第" + Random.nextInt(10000) + "章"
+                        )
+                    )
+                },modifier = Modifier.size(100.dp,140.dp).padding(10.dp)) {
+                    Text(text = "新增")
                 }
             }
         }
@@ -146,19 +152,20 @@ fun BookshelfList(
 }
 
 @Composable
-fun BookshelfContent(book: Bookshelf, editState: EditStateViewModel, navController: NavHostController) {
-    val checkboxState = remember {
-        mutableStateOf(false)
-    }
+fun BookshelfContent(book: BookshelfEntity, viewModel: BookshelfViewModel, navController: NavHostController) {
 
     Box(contentAlignment = Alignment.TopEnd,
         modifier = Modifier
             .width(100.dp)
-            .padding(10.dp)
+            .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 20.dp)
             .clickable {
+                if (viewModel.editButtonState.value == EditButtonStateEnum.OPENED) {
 
-                if (editState.editButtonState.value == EditButtonStateEnum.OPENED) {
-                    checkboxState.value = !checkboxState.value
+                    if (!viewModel.delBookshelfList.contains(book)) {
+                        viewModel.addDelBookshelf(book)
+                    } else {
+                        viewModel.removeDelBookshelf(book)
+                    }
                 } else {
                     navController.navigate(OtherScreen.Read.route)
                 }
@@ -180,7 +187,7 @@ fun BookshelfContent(book: Bookshelf, editState: EditStateViewModel, navControll
                 var modifier: Modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                if (checkboxState.value) {
+                if (viewModel.delBookshelfList.contains(book)) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp)
@@ -212,7 +219,7 @@ fun BookshelfContent(book: Bookshelf, editState: EditStateViewModel, navControll
 
             }
 
-            if (editState.editButtonState.value == EditButtonStateEnum.OPENED) {
+            if (viewModel.editButtonState.value == EditButtonStateEnum.OPENED) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -223,8 +230,14 @@ fun BookshelfContent(book: Bookshelf, editState: EditStateViewModel, navControll
 
                 ) {
                     RadioButton(
-                        selected = checkboxState.value,
-                        onClick = { checkboxState.value = !checkboxState.value },
+                        selected = viewModel.delBookshelfList.contains(book),
+                        onClick = {
+                            if (!viewModel.delBookshelfList.contains(book)) {
+                                viewModel.addDelBookshelf(book)
+                            } else {
+                                viewModel.removeDelBookshelf(book)
+                            }
+                        },
                         colors = RadioButtonDefaults.colors(
                             selectedColor = Color.Blue,
                             disabledColor = Color.White,

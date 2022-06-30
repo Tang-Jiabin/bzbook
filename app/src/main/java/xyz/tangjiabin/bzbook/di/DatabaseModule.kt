@@ -1,4 +1,4 @@
-package xyz.tangjiabin.bzbook.database.di
+package xyz.tangjiabin.bzbook.di
 
 import android.content.Context
 import androidx.room.Room
