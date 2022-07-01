@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
  * @date 2022-06-28
  */
 @Entity(tableName = "bz_bookshelf")
-data class BookshelfEntity(
+data class BookEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val name: String,
     @ColumnInfo val cover: String,

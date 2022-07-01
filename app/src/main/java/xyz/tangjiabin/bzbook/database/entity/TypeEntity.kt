@@ -16,5 +16,5 @@ import androidx.room.PrimaryKey
 data class TypeEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val name: String,
-    @ColumnInfo val categoryList: List<CategoryEntity>
+//    @ColumnInfo val categoryList: List<CategoryEntity>
 )

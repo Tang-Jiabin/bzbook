@@ -22,7 +22,8 @@ import xyz.tangjiabin.bzbook.screens.top.TopBarScreen
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = { TopBarScreen(navController = navController) },
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = { BottomBar(navController = navController) },
+
     ) {
         HomeNavGraph(navController = navController)
     }

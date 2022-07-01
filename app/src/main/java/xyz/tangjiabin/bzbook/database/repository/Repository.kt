@@ -3,7 +3,7 @@ package xyz.tangjiabin.bzbook.database.repository
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import xyz.tangjiabin.bzbook.database.AppDatabase
-import xyz.tangjiabin.bzbook.database.entity.BookshelfEntity
+import xyz.tangjiabin.bzbook.database.entity.BookEntity
 import xyz.tangjiabin.bzbook.utils.LOG_TAG_INFO
 import javax.inject.Inject
 
@@ -15,16 +15,16 @@ class Repository @Inject constructor(
     private val bookshelfDao = appDatabase.bookshelfDao()
 
 
-    fun findAllBookshelf(): Flow<List<BookshelfEntity>> {
+    fun findAllBookshelf(): Flow<List<BookEntity>> {
         return bookshelfDao.findAll()
     }
 
-    fun addBookshelf(bookshelf: BookshelfEntity) {
+    fun addBookshelf(bookshelf: BookEntity) {
         Log.d(LOG_TAG_INFO, "REPO_ADD_BOOKSHELF")
         bookshelfDao.save(bookshelf)
     }
 
-    fun delBookshelf(delBookshelfList: MutableList<BookshelfEntity>) {
+    fun delBookshelf(delBookshelfList: MutableList<BookEntity>) {
         bookshelfDao.deleteAll(delBookshelfList)
     }
 

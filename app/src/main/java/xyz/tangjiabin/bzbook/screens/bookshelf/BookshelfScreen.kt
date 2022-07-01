@@ -31,7 +31,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import xyz.tangjiabin.bzbook.R
-import xyz.tangjiabin.bzbook.database.entity.BookshelfEntity
+import xyz.tangjiabin.bzbook.database.entity.BookEntity
 import xyz.tangjiabin.bzbook.graph.OtherScreen
 import kotlin.random.Random
 
@@ -49,7 +49,7 @@ fun BookshelfScreen(navController: NavHostController, viewModel: BookshelfViewMo
 
 
     LaunchedEffect(Unit) {
-        viewModel.getAllBookshelf()
+        viewModel.getAllBook()
     }
 
     BookshelfList(viewModel = viewModel, navController = navController)
@@ -64,7 +64,7 @@ fun BookshelfList(
     navController: NavHostController
 ) {
 
-    val bookList = viewModel.bookshelfList
+    val bookList = viewModel.bookList
 
     Column(modifier = Modifier.padding(10.dp)) {
         //统计及编辑按钮
@@ -105,7 +105,7 @@ fun BookshelfList(
                         maxLines = 1,
                         modifier = Modifier
                             .padding(10.dp)
-                            .clickable { viewModel.deleteBookshelf() }
+                            .clickable { viewModel.deleteBook() }
                     )
                     Text(
                         text = "完成",
@@ -124,7 +124,7 @@ fun BookshelfList(
         //书架列表
         LazyVerticalGrid(
             columns = GridCells.Adaptive(100.dp),
-            modifier = Modifier.border(1.dp, Color.Black).padding(bottom = 80.dp)
+            modifier = Modifier.padding(bottom = 80.dp)
         ) {
             items(bookList) {
                 BookshelfContent(it, viewModel, navController)
@@ -132,7 +132,7 @@ fun BookshelfList(
             item {
                 Button(onClick = {
                     viewModel.addBookshelf(
-                        BookshelfEntity(
+                        BookEntity(
                             0,
                             "书籍名称" + Random.nextInt(100),
                             "https://picsum.photos/200/300?" + Random.nextInt(100),
@@ -152,7 +152,7 @@ fun BookshelfList(
 }
 
 @Composable
-fun BookshelfContent(book: BookshelfEntity, viewModel: BookshelfViewModel, navController: NavHostController) {
+fun BookshelfContent(book: BookEntity, viewModel: BookshelfViewModel, navController: NavHostController) {
 
     Box(contentAlignment = Alignment.TopEnd,
         modifier = Modifier
@@ -161,10 +161,10 @@ fun BookshelfContent(book: BookshelfEntity, viewModel: BookshelfViewModel, navCo
             .clickable {
                 if (viewModel.editButtonState.value == EditButtonStateEnum.OPENED) {
 
-                    if (!viewModel.delBookshelfList.contains(book)) {
-                        viewModel.addDelBookshelf(book)
+                    if (!viewModel.delBookList.contains(book)) {
+                        viewModel.addDelBook(book)
                     } else {
-                        viewModel.removeDelBookshelf(book)
+                        viewModel.removeDelBook(book)
                     }
                 } else {
                     navController.navigate(OtherScreen.Read.route)
@@ -187,7 +187,7 @@ fun BookshelfContent(book: BookshelfEntity, viewModel: BookshelfViewModel, navCo
                 var modifier: Modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                if (viewModel.delBookshelfList.contains(book)) {
+                if (viewModel.delBookList.contains(book)) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp)
@@ -230,12 +230,12 @@ fun BookshelfContent(book: BookshelfEntity, viewModel: BookshelfViewModel, navCo
 
                 ) {
                     RadioButton(
-                        selected = viewModel.delBookshelfList.contains(book),
+                        selected = viewModel.delBookList.contains(book),
                         onClick = {
-                            if (!viewModel.delBookshelfList.contains(book)) {
-                                viewModel.addDelBookshelf(book)
+                            if (!viewModel.delBookList.contains(book)) {
+                                viewModel.addDelBook(book)
                             } else {
-                                viewModel.removeDelBookshelf(book)
+                                viewModel.removeDelBook(book)
                             }
                         },
                         colors = RadioButtonDefaults.colors(

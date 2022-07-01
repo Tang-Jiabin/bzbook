@@ -1,15 +1,13 @@
 package xyz.tangjiabin.bzbook.screens.bookshelf
 
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import xyz.tangjiabin.bzbook.database.entity.BookshelfEntity
+import xyz.tangjiabin.bzbook.database.entity.BookEntity
 import xyz.tangjiabin.bzbook.database.repository.Repository
-import xyz.tangjiabin.bzbook.utils.LOG_TAG_INFO
 import javax.inject.Inject
 
 /**
@@ -34,44 +32,36 @@ class BookshelfViewModel @Inject constructor(
         _editButtonState.value = newValue
     }
 
-    var bookshelfList by mutableStateOf(emptyList<BookshelfEntity>())
+    var bookList by mutableStateOf(emptyList<BookEntity>())
 
-    val delBookshelfList= mutableStateListOf<BookshelfEntity>()
+    val delBookList= mutableStateListOf<BookEntity>()
 
 
 
     //添加书籍到书架
-    fun addBookshelf(bookshelf: BookshelfEntity) = viewModelScope.launch(Dispatchers.IO) {
-        Log.d(LOG_TAG_INFO, "VIEW_MODE_ADD_BOOKSHELF")
+    fun addBookshelf(bookshelf: BookEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.addBookshelf(bookshelf)
-
     }
 
 
     //获取书架所有
-    fun getAllBookshelf() = viewModelScope.launch(Dispatchers.IO) {
+    fun getAllBook() = viewModelScope.launch(Dispatchers.IO) {
         repository.findAllBookshelf().collect { response ->
-            bookshelfList = response
+            bookList = response
         }
     }
 
-    fun deleteBookshelf() = viewModelScope.launch(Dispatchers.IO) {
-        for (bookshelfEntity in delBookshelfList) {
-            Log.d(LOG_TAG_INFO, bookshelfEntity.toString())
-        }
-        repository.delBookshelf(delBookshelfList)
-        delBookshelfList.removeAll(delBookshelfList)
-        for (bookshelfEntity in delBookshelfList) {
-            Log.d(LOG_TAG_INFO, bookshelfEntity.toString())
-        }
+    fun deleteBook() = viewModelScope.launch(Dispatchers.IO) {
+        repository.delBookshelf(delBookList)
+        delBookList.removeAll(delBookList)
     }
 
-    fun addDelBookshelf(book: BookshelfEntity) {
-        delBookshelfList.add(book)
+    fun addDelBook(book: BookEntity) {
+        delBookList.add(book)
     }
 
-    fun removeDelBookshelf(book: BookshelfEntity) {
-        delBookshelfList.remove(book)
+    fun removeDelBook(book: BookEntity) {
+        delBookList.remove(book)
     }
 
 
