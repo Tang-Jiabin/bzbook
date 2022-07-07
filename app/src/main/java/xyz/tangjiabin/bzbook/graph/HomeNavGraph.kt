@@ -39,10 +39,7 @@ fun HomeNavGraph(navController: NavHostController) {
         }
         //我的
         composable(route = BottomBarScreen.Me.route) {
-            MeScreen(
-                name = BottomBarScreen.Me.route,
-                onClick = { navController.navigate(OtherScreen.Login.route) }
-            )
+            MeScreen(navController)
         }
         //阅读
         composable(route = OtherScreen.Read.route) {

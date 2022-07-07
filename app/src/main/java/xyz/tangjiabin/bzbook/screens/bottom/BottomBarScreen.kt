@@ -5,8 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -69,12 +69,6 @@ fun RowScope.AddItem(
             }
             Text(text = screen.title, color = iconColor)
         },
-//        icon = {
-//            Icon(
-//                imageVector = screen.icon,
-//                contentDescription = "Navigation Icon"
-//            )
-//        },
         icon = {
             var iconRes = screen.icon
             var iconColor = MaterialTheme.colors.onBackground
@@ -113,13 +107,13 @@ sealed class BottomBarScreen(
     object Bookshelf : BottomBarScreen(
         route = "BOOKSHELF",
         title = "书架",
-        icon = Icons.Default.Build
+        icon = Icons.Default.Home
     )
 
     object Classification : BottomBarScreen(
         route = "CLASSIFICATION",
         title = "分类",
-        icon = Icons.Default.List
+        icon = Icons.Default.DateRange
     )
 
     object Me : BottomBarScreen(

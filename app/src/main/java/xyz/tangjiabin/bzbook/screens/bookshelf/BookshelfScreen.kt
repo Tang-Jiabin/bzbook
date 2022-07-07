@@ -9,7 +9,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -124,25 +126,40 @@ fun BookshelfList(
         //书架列表
         LazyVerticalGrid(
             columns = GridCells.Adaptive(100.dp),
-            modifier = Modifier.padding(bottom = 80.dp)
         ) {
             items(bookList) {
                 BookshelfContent(it, viewModel, navController)
             }
             item {
-                Button(onClick = {
-                    viewModel.addBookshelf(
-                        BookEntity(
-                            0,
-                            "书籍名称" + Random.nextInt(100),
-                            "https://picsum.photos/200/300?" + Random.nextInt(100),
-                            "第" + Random.nextInt(10000) + "章"
-                        )
-                    )
-                },modifier = Modifier.size(100.dp,140.dp).padding(10.dp)) {
-                    Text(text = "新增")
+                Column(modifier = Modifier.padding(10.dp)) {
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_add_circle_outline_24),
+                        contentDescription = "",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.addBookshelf(
+                                    BookEntity(
+                                        0,
+                                        "书籍名称" + Random.nextInt(100),
+                                        "作者" + Random.nextInt(100),
+                                        "https://picsum.photos/200/300?" + Random.nextInt(100),
+                                        "第" + Random.nextInt(10000) + "章"
+                                    )
+                                )
+                            }
+                            .height(120.dp)
+                            .width(100.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color.LightGray))
+
+                    Spacer(modifier = Modifier.padding(60.dp))
                 }
+
+
             }
+
         }
 
 
@@ -177,8 +194,8 @@ fun BookshelfContent(book: BookEntity, viewModel: BookshelfViewModel, navControl
                 val painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
                         .data(book.cover)
-                        .placeholder(R.drawable.ic_baseline_menu_24)
-                        .error(R.drawable.ic_baseline_menu_24)
+                        .placeholder(R.drawable.ic_baseline_image_24)
+                        .error(R.drawable.ic_baseline_image_24)
                         .crossfade(true)
                         .transformations(RoundedCornersTransformation(8f))
                         .build()
