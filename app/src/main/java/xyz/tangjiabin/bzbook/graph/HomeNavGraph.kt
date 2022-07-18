@@ -50,10 +50,7 @@ fun HomeNavGraph(navController: NavHostController) {
         }
         //搜索
         composable(route = OtherScreen.Search.route) {
-            SearchScreen(
-                name = OtherScreen.Search.route,
-                onClick = { navController.navigate(OtherScreen.Details.route) }
-            )
+            SearchScreen(navController)
         }
         //详情
         composable(route = OtherScreen.Details.route) {

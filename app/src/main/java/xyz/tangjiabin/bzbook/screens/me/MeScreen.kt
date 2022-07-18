@@ -24,6 +24,7 @@ import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import xyz.tangjiabin.bzbook.R
 
+
 /**
  * 我的
  *
@@ -52,7 +53,7 @@ fun MeScreen(navController: NavHostController, viewModel: MeViewModel = hiltView
         ) {
             val painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data("https://picsum.photos/200/300?random=80")
+                    .data("https://picsum.photos/200/300?random=60")
                     .placeholder(R.drawable.ic_baseline_image_24)
                     .error(R.drawable.ic_baseline_image_24)
                     .crossfade(true)

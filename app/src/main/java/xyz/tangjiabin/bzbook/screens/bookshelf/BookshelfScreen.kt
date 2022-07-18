@@ -10,10 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -35,7 +32,7 @@ import coil.transform.RoundedCornersTransformation
 import xyz.tangjiabin.bzbook.R
 import xyz.tangjiabin.bzbook.database.entity.BookEntity
 import xyz.tangjiabin.bzbook.graph.OtherScreen
-import kotlin.random.Random
+import xyz.tangjiabin.bzbook.screens.bottom.BottomBarScreen
 
 /**
  * 书架（首页）内容
@@ -139,20 +136,21 @@ fun BookshelfList(
                         tint = Color.White,
                         modifier = Modifier
                             .clickable {
-                                viewModel.addBookshelf(
-                                    BookEntity(
-                                        0,
-                                        "书籍名称" + Random.nextInt(100),
-                                        "作者" + Random.nextInt(100),
-                                        "https://picsum.photos/200/300?" + Random.nextInt(100),
-                                        "第" + Random.nextInt(10000) + "章"
-                                    )
-                                )
+                                navController.navigate(BottomBarScreen.Classification.route)
+//                                viewModel.addBookshelf(
+//                                    BookEntity(
+//                                        0,
+//                                        "书籍名称" + Random.nextInt(100),
+//                                        "作者" + Random.nextInt(100),
+//                                        "https://picsum.photos/200/300?" + Random.nextInt(100),
+//                                        "第" + Random.nextInt(10000) + "章"
+//                                    )
+//                                )
                             }
                             .height(120.dp)
                             .width(100.dp)
                             .clip(RoundedCornerShape(4.dp))
-                            .background(Color.LightGray))
+                            .background(MaterialTheme.colors.onBackground.copy(0.1f)))
 
                     Spacer(modifier = Modifier.padding(60.dp))
                 }
